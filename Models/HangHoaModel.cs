@@ -9,7 +9,7 @@ namespace WebApi_HienLTH.Models
     }
 
     //về mặt database
-    public class HangHoa : HangHoaVM
+    public class HangHoaModel : HangHoaVM
     {
         public Guid MaHangHoa { get; set; }
     }

@@ -7,7 +7,7 @@ namespace WebApi_HienLTH.Controllers
     [ApiController]
     public class HangHoaController : ControllerBase
     {
-        public static List<HangHoa> hangHoas = new List<HangHoa>();
+        public static List<HangHoaModel> hangHoas = new List<HangHoaModel>();
 
 
         [HttpGet]
@@ -39,7 +39,7 @@ namespace WebApi_HienLTH.Controllers
         [HttpPost]
         public IActionResult Create(HangHoaVM hangHoaVM)
         {
-            var hanghoa = new HangHoa
+            var hanghoa = new HangHoaModel
             {
                 MaHangHoa = Guid.NewGuid(),
                 TenHangHoa = hangHoaVM.TenHangHoa,
@@ -54,7 +54,7 @@ namespace WebApi_HienLTH.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Edit(string id, HangHoa hangHoaEdit)
+        public IActionResult Edit(string id, HangHoaModel hangHoaEdit)
         {
             try
             {
