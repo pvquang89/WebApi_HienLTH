@@ -26,6 +26,12 @@ namespace WebApi_HienLTH.Data
         [ForeignKey("MaLoai")]
         public LoaiEntity Loai { get; set; }
 
-       
+        //
+        public ICollection<DonHangChiTietEntity> DonHangChiTiets { get; set; }
+        public HangHoaEntity()
+        {
+            DonHangChiTiets = new List<DonHangChiTietEntity>();
+        }
+
     }
 }
