@@ -56,5 +56,12 @@ namespace WebApi_HienLTH.Repository
             _context.Loais.Update(entity);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _context.Loais.AnyAsync(e => e.MaLoai == id);
+        }
+
+
     }
 }
