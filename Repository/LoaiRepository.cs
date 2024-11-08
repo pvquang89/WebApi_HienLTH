@@ -1,26 +1,41 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using MyWebApiApp.Data;
 using WebApi_HienLTH.Data;
+using WebApi_HienLTH.Models;
 
 namespace WebApi_HienLTH.Repository
 {
-    public class LoaiRepository : IGenericRepository<LoaiEntity>
+    public class LoaiRepository : IGenericRepository<LoaiModel>
     {
-        public MyDbContext _context;
+        private readonly MyDbContext _context;
+        private readonly IMapper _mapper;
 
-        public LoaiRepository(MyDbContext context)
+        public LoaiRepository(MyDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<LoaiEntity>> GetAllAsync() => await _context.Loais.ToListAsync();
-
-
-        //thêm ? sau LoaiEntity cho phép nó có thể null vì FindAsync() có thể traer về null
-        public async Task<LoaiEntity?> GetByIdAsync(int id) => await _context.Loais.FindAsync(id);
-
-        public async Task CreateAsync(LoaiEntity entity)
+        public async Task<IEnumerable<LoaiModel>> GetAllAsync()
         {
+            var entities = await _context.Loais.ToListAsync();
+            return _mapper.Map<IEnumerable<LoaiModel>>(entities);
+        }
+
+        //thêm ? sau LoaiEntity cho phép nó có thể null vì FindAsync() có thể trả về null
+        public async Task<LoaiModel?> GetByIdAsync(int id)
+        {
+            var entity = await _context.Loais.FindAsync(id);
+            return _mapper.Map<LoaiModel>(entity);
+        }
+
+        public async Task CreateAsync(LoaiModel model)
+        {
+            // Map từ LoaiModel sang LoaiEntity
+            //vì model là để tương tác với client còn chuyển sang entity mới tương tác vưới database
+            var entity = _mapper.Map<LoaiEntity>(model);
             await _context.Loais.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
@@ -35,8 +50,9 @@ namespace WebApi_HienLTH.Repository
             }
         }
 
-        public async Task UpdateAsync(LoaiEntity entity)
+        public async Task UpdateAsync(LoaiModel model)
         {
+            var entity = _mapper.Map<LoaiEntity>(model);
             _context.Loais.Update(entity);
             await _context.SaveChangesAsync();
         }
