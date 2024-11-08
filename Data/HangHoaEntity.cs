@@ -8,7 +8,7 @@ namespace WebApi_HienLTH.Data
     public class HangHoaEntity
     {
         [Key]
-        public Guid MaHh { get; set; }
+        public int MaHh { get; set; }
 
         [Required]
         [MaxLength(100)]

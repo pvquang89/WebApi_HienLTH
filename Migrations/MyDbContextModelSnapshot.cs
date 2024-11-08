@@ -42,11 +42,11 @@ namespace WebApi_HienLTH.Migrations
 
             modelBuilder.Entity("WebApi_HienLTH.Data.DonHangChiTietEntity", b =>
                 {
-                    b.Property<Guid>("MaDh")
-                        .HasColumnType("uuid");
+                    b.Property<int>("MaDh")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("MaHh")
-                        .HasColumnType("uuid");
+                    b.Property<int>("MaHh")
+                        .HasColumnType("integer");
 
                     b.Property<double>("DonGia")
                         .HasColumnType("double precision");
@@ -66,9 +66,11 @@ namespace WebApi_HienLTH.Migrations
 
             modelBuilder.Entity("WebApi_HienLTH.Data.DonHangEntity", b =>
                 {
-                    b.Property<Guid>("MaDh")
+                    b.Property<int>("MaDh")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MaDh"));
 
                     b.Property<string>("DiaChiGiao")
                         .IsRequired()
@@ -101,9 +103,11 @@ namespace WebApi_HienLTH.Migrations
 
             modelBuilder.Entity("WebApi_HienLTH.Data.HangHoaEntity", b =>
                 {
-                    b.Property<Guid>("MaHh")
+                    b.Property<int>("MaHh")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MaHh"));
 
                     b.Property<double>("DonGia")
                         .HasColumnType("double precision");

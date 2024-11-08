@@ -6,7 +6,7 @@
     }
     public class DonHangEntity
     {
-        public Guid MaDh { get; set; }
+        public int MaDh { get; set; }
         public DateTime NgatDat { get; set; }
         public DateTime? NgayGiao { get; set; }
         public TinhTrangDonDatHang TinhTrangDonHang { get; set; }

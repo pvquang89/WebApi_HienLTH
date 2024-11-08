@@ -17,7 +17,7 @@ namespace WebApi_HienLTH.Repository
 
 
         //thêm ? sau LoaiEntity cho phép nó có thể null vì FindAsync() có thể traer về null
-        public async Task<LoaiEntity?> GetByIdAsync(Guid id) => await _context.Loais.FindAsync(id);
+        public async Task<LoaiEntity?> GetByIdAsync(int id) => await _context.Loais.FindAsync(id);
 
         public async Task CreateAsync(LoaiEntity entity)
         {
@@ -25,7 +25,7 @@ namespace WebApi_HienLTH.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(int id)
         {
             var entity = await _context.Loais.FindAsync(id);
             if (entity != null)
