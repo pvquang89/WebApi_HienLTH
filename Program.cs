@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using WebApi_HienLTH.Data;
+using WebApi_HienLTH.Helper;
+using WebApi_HienLTH.Models;
+using WebApi_HienLTH.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,13 @@ builder.Services.AddSwaggerGen();
 //
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<MyDbContext>
     (opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("MyDb")));
+
+
+//register DI
+//resgiter automapper
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+builder.Services.AddScoped<IGenericRepository<LoaiModel>, LoaiRepository>();
+
 
 var app = builder.Build();
 
