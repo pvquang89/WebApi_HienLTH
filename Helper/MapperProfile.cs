@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MyWebApiApp.Data;
+using WebApi_HienLTH.Data;
 using WebApi_HienLTH.Models;
 
 namespace WebApi_HienLTH.Helper
@@ -10,6 +11,14 @@ namespace WebApi_HienLTH.Helper
         {
             //Map 2 chiều từ LoaiEntity sang LoaiModel và ngược lại
             CreateMap<LoaiEntity, LoaiModel>().ReverseMap();
+
+            //ForMember : ánh xạ cho thuộc tính
+            CreateMap<HangHoaEntity, HangHoaModel>()
+            //đoạn này : ánh xạ TenLoai từ Loai trong src vào TenLoai trong dest
+            //cách đọc tương tự CreateMap(), map từ tham số thứ 2 sang tham số thứ 1
+            .ForMember(dest => dest.TenLoai, // thuộc tính đích muốn map đến
+                        opt => opt.MapFrom(src => src.Loai.TenLoai)) //map từ src vào dest
+            .ReverseMap();
         }
 
     }
