@@ -7,15 +7,10 @@ using WebApi_HienLTH.Models;
 
 namespace WebApi_HienLTH.Repository
 {
-    public class LoaiRepository : IGenericRepository<LoaiModel>
+    public class LoaiRepository : RepositoryBase, IGenericRepository<LoaiModel>
     {
-        private readonly MyDbContext _context;
-        private readonly IMapper _mapper;
-
-        public LoaiRepository(MyDbContext context, IMapper mapper)
+        public LoaiRepository(MyDbContext context, IMapper mapper) : base(context, mapper)
         {
-            _context = context;
-            _mapper = mapper;
         }
 
         public async Task<IEnumerable<LoaiModel>> GetAllAsync()

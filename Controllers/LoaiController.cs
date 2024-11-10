@@ -4,7 +4,7 @@ using WebApi_HienLTH.Repository;
 
 namespace WebApi_HienLTH.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class LoaiController : ControllerBase
     {
