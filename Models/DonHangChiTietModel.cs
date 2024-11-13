@@ -10,5 +10,6 @@
 
         //Thêm tên hàng hoá
         public string TenHangHoa { get; set; }
+
     }
 }
