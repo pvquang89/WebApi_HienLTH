@@ -19,6 +19,9 @@ namespace WebApi_HienLTH.Helper
             .ForMember(dest => dest.TenLoai, // thuộc tính đích muốn map đến
                         opt => opt.MapFrom(src => src.Loai.TenLoai)) //map từ src vào dest
             .ReverseMap();
+
+            CreateMap<DonHangEntity, DonHangModel>().ReverseMap();
+
         }
 
     }
