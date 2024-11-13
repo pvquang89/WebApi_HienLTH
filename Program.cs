@@ -25,6 +25,8 @@ builder.Services.AddEntityFrameworkNpgsql().AddDbContext<MyDbContext>
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<IGenericRepository<LoaiModel>, LoaiRepository>();
 builder.Services.AddScoped<IGenericRepository<HangHoaModel>, HangHoaRepository>();
+builder.Services.AddScoped<IGenericRepository<DonHangModel>, DonHangRepository>();
+
 
 
 var app = builder.Build();
