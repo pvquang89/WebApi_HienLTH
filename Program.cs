@@ -26,6 +26,8 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<IGenericRepository<LoaiModel>, LoaiRepository>();
 builder.Services.AddScoped<IGenericRepository<HangHoaModel>, HangHoaRepository>();
 builder.Services.AddScoped<IGenericRepository<DonHangModel>, DonHangRepository>();
+builder.Services.AddScoped<DonHangChiTietRepository>();
+
 
 
 
