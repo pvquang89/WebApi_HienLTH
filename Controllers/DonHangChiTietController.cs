@@ -9,15 +9,21 @@ namespace WebApi_HienLTH.Controllers
     public class DonHangChiTietController : Controller
     {
         private readonly DonHangChiTietRepository _donHangChiTietRepository;
+
+
         public DonHangChiTietController(DonHangChiTietRepository donHangChiTietRepository)
         {
             _donHangChiTietRepository = donHangChiTietRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DonHangChiTietModel>>> GetAll()
+        public async Task<ActionResult<IEnumerable<DonHangChiTietModel>>> GetAll(string? tenHh, int? maDh, string? sortBy, int page = 1)
         {
-            var entities = await _donHangChiTietRepository.GetAllAsync();
+            var entities = await _donHangChiTietRepository.GetAllAsync(tenHh, maDh, sortBy, page);
+            if (!entities.Any())
+            {
+                return NotFound("Ko tìm thấy");
+            }
             return Ok(entities);
         }
 
@@ -57,5 +63,18 @@ namespace WebApi_HienLTH.Controllers
             await _donHangChiTietRepository.DeleteAsync(maDh, maHh);
             return NoContent();
         }
+
+        [HttpGet("{maDh}")]
+        public async Task<ActionResult<double>> GetTotalValueByMaDonHang(int maDh)
+        {
+            if (!await _donHangChiTietRepository.ExistsAsync(maDh))
+            {
+                return NotFound();
+            }
+            var totalValue = await _donHangChiTietRepository.GetTotalValueByMaDh(maDh);
+            return Ok(totalValue);
+        }
+
+
     }
 }
