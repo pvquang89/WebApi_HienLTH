@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApi_HienLTH.Models;
 using WebApi_HienLTH.Repository;
 
@@ -32,6 +33,8 @@ namespace WebApi_HienLTH.Controllers
         }
 
         [HttpPost]
+        //thêm [Authorize] để test JWT, nếu chưa đăng nhập sẽ ko được thêm mới
+        [Authorize]
         public async Task<ActionResult<LoaiModel>> Create(LoaiModel model)
         {
             if(!ModelState.IsValid)
