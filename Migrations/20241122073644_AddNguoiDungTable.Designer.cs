@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApi_HienLTH.Data;
@@ -11,9 +12,11 @@ using WebApi_HienLTH.Data;
 namespace WebApi_HienLTH.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241122073644_AddNguoiDungTable")]
+    partial class AddNguoiDungTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,44 +173,6 @@ namespace WebApi_HienLTH.Migrations
                     b.ToTable("NguoiDung");
                 });
 
-            modelBuilder.Entity("WebApi_HienLTH.Data.RefreshToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("ExpiredAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsRevoked")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("IssuedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("JwtId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RefreshTokens");
-                });
-
             modelBuilder.Entity("WebApi_HienLTH.Data.DonHangChiTietEntity", b =>
                 {
                     b.HasOne("WebApi_HienLTH.Data.DonHangEntity", "DonHang")
@@ -236,17 +201,6 @@ namespace WebApi_HienLTH.Migrations
                         .HasForeignKey("MaLoai");
 
                     b.Navigation("Loai");
-                });
-
-            modelBuilder.Entity("WebApi_HienLTH.Data.RefreshToken", b =>
-                {
-                    b.HasOne("WebApi_HienLTH.Data.NguoiDungEntity", "NguoiDung")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("NguoiDung");
                 });
 
             modelBuilder.Entity("MyWebApiApp.Data.LoaiEntity", b =>
