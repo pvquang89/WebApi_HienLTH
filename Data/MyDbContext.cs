@@ -15,6 +15,8 @@ namespace WebApi_HienLTH.Data
         public DbSet<DonHangEntity> DonHangs { get; set; }
         public DbSet<DonHangChiTietEntity> DonHangChiTiets { get; set; }
         public DbSet<NguoiDungEntity> NguoiDungs { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
 
         #endregion
 
