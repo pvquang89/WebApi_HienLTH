@@ -1,4 +1,4 @@
-﻿namespace WebApi_HienLTH.Models
+﻿namespace WebApi_HienLTH.Models.ModelsForJwt
 {
     //dùng để trả về phản hồi khi validate lúc login
     public class ApiResponse
