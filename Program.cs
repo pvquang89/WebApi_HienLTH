@@ -7,6 +7,7 @@ using System.Text;
 using WebApi_HienLTH.Data;
 using WebApi_HienLTH.Helper;
 using WebApi_HienLTH.Models;
+using WebApi_HienLTH.Models.ModelsForJwt;
 using WebApi_HienLTH.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
