@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 using WebApi_HienLTH.Data;
 using WebApi_HienLTH.Helper;
 using WebApi_HienLTH.Models;
+using WebApi_HienLTH.Models.JwtModel;
 using WebApi_HienLTH.Models.ModelsForJwt;
 using WebApi_HienLTH.Repository;
+using WebApi_HienLTH.Repository.NguoiDungRepository;
+using WebApi_HienLTH.Repository.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,34 +35,43 @@ builder.Services.AddScoped<IGenericRepository<LoaiModel>, LoaiRepository>();
 builder.Services.AddScoped<IGenericRepository<HangHoaModel>, HangHoaRepository>();
 builder.Services.AddScoped<IGenericRepository<DonHangModel>, DonHangRepository>();
 builder.Services.AddScoped<DonHangChiTietRepository>();
-//
-builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 
-//for jwt
-// Lấy secretKey từ file cấu hình appsettings.js
-var secretKey = builder.Configuration["AppSettings:SecretKey"];
-//chuyển secretKey sang dạng byte để mã hoá 
+//Cấu hình làm việc với jwt
+//Đọc cấu hình jwt từ appSettings.json vào jwtsettings class
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+//Đăng ký DI
+builder.Services.AddScoped<JwtSettings>();
+builder.Services.AddScoped<INguoiDungRepository, NguoiDungRepository>();
+// Lấy secretKey từ file cấu hình 
+var secretKey = builder.Configuration["JwtSettings:SecretKey"];
+//Chuyển secretKey sang dạng byte để mã hoá 
 var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
-//đăng ký dịch vụ authen với jwtBearer
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(opt =>
+//Cấu hình cơ chế authenticate jwt 
+builder.Services.AddAuthentication(options =>
+{
+    //đăng ký dịch vụ authen
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        opt.TokenValidationParameters = new TokenValidationParameters
-        {
-            // Tự cấp token
-            ValidateIssuer = false,
-            ValidateAudience = false,
-
-            // Ký vào token
-            ValidateIssuerSigningKey = true,
-            //thuật toán đối xứng
-            IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
-
-            ClockSkew = TimeSpan.Zero //ko cho thời gian trễ, token hết hạn sẽ từ chối ngay. Mặc định 5 phút
-        };
-    });
-
-
+        //Ko kiểm tra nhà phát hành
+        ValidateIssuer = false,
+        //Ko kiểm tra người nhận 
+        ValidateAudience = false,
+        //Khi kích hoạt sẽ kiểm tra thời gian hiện tại tại có nằm trong khoảng nbf đến exp hay ko
+        ValidateLifetime = true,
+        //Kiểm tra chữ ký 
+        ValidateIssuerSigningKey = true,
+        //Cung cấp secret key để xác minh chữ ký (xem có trùng với chữ ký ở token người dùng cung cấp)
+        IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+        //Ko cho thời gian trễ, token hết hạn sẽ từ chối ngay. Mặc định 5 phút
+        ClockSkew = TimeSpan.Zero 
+    };
+});
 
 var app = builder.Build();
 
