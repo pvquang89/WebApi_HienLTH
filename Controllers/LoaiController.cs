@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi_HienLTH.Models;
-using WebApi_HienLTH.Repository;
+using WebApi_HienLTH.Repository.Repository;
 
 namespace WebApi_HienLTH.Controllers
 {
