@@ -8,6 +8,7 @@ using System.Text;
 using WebApi_HienLTH.Data;
 using WebApi_HienLTH.Models;
 using WebApi_HienLTH.Models.JwtModel;
+using WebApi_HienLTH.Models.ModelsForJwt;
 using WebApi_HienLTH.Repository.NguoiDungRepository;
 
 namespace WebApi_HienLTH.Controllers
@@ -31,12 +32,21 @@ namespace WebApi_HienLTH.Controllers
             var user = _nguoiDungRepository.Authenticate(request.UserName, request.Password);
 
             if (user == null)
-                return Unauthorized(new { message = "Invalid username or password" });
+                return Unauthorized(new ApiResponse
+                {
+                    Success = false,
+                    Message = "Invalid username or password"
+                });
 
             //Nếu đúng, tạo token
             var token = GenerateJwtToken(user);
 
-            return Ok(new { Token = token });
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Authenticate success",
+                Data = token
+            });
         }
 
         private string GenerateJwtToken(NguoiDungEntity user)
@@ -63,7 +73,7 @@ namespace WebApi_HienLTH.Controllers
                 //issuer: _jwtSettings.Issuer,
                 //audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddSeconds(20),
+                expires: DateTime.UtcNow.AddSeconds(60),
                 //cung cấp thông tin về cách ký : thuật toán, secret key
                 signingCredentials: creds
             );
