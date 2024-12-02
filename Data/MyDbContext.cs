@@ -15,6 +15,7 @@ namespace WebApi_HienLTH.Data
         public DbSet<DonHangEntity> DonHangs { get; set; }
         public DbSet<DonHangChiTietEntity> DonHangChiTiets { get; set; }
         public DbSet<NguoiDungEntity> NguoiDungs { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
         #endregion
@@ -49,7 +50,7 @@ namespace WebApi_HienLTH.Data
             modelBuilder.Entity<NguoiDungEntity>(e =>
             {
                 e.HasIndex(e => e.UserName).IsUnique();
-                e.Property(e=>e.HoTen).IsRequired().HasMaxLength(100);
+                e.Property(e => e.HoTen).IsRequired().HasMaxLength(100);
                 e.Property(e => e.Email).IsRequired().HasMaxLength(100);
             });
         }
