@@ -12,9 +12,10 @@ namespace WebApi_HienLTH.Data
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public NguoiDungEntity NguoiDung { get; set; }
-        
+
         //nội dung token
         public string Token { get; set; }
+
         //access token tương ứng
         public string JwtId { get; set; }
         public bool IsUsed { get; set; }

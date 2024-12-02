@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using WebApi_HienLTH.Data;
 
-namespace WebApi_HienLTH.Repository
+namespace WebApi_HienLTH.Repository.Repository
 {
     //class này để các repository kế thừa, ko phải tạo các field lặp lại ở mỗi repository
     public class RepositoryBase

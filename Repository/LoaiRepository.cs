@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MyWebApiApp.Data;
 using WebApi_HienLTH.Data;
 using WebApi_HienLTH.Models;
+using WebApi_HienLTH.Repository.Repository;
 
 namespace WebApi_HienLTH.Repository
 {

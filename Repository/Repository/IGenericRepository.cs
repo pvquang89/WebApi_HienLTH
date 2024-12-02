@@ -1,4 +1,4 @@
-﻿namespace WebApi_HienLTH.Repository
+﻿namespace WebApi_HienLTH.Repository.Repository
 {
     public interface IGenericRepository<T> where T : class
     {
