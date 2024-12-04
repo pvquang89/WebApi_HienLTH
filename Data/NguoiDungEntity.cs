@@ -16,5 +16,8 @@ namespace WebApi_HienLTH.Data
         public string Password { get; set; }
         public string HoTen { get; set; }
         public string Email { get; set; }
+
+        //
+        public ICollection<UserRole> Roles { get; set; }    
     }
 }
