@@ -148,11 +148,11 @@ namespace WebApi_HienLTH.Controllers
                     return NotFound(new { Message = "User not found" });
 
                 //cấp bộ token mới
-                var newToken = await GenerateToken(user); 
+                var newToken = await GenerateToken(user);
                 //ở đây không cần lưu lại bộ token mới vào database
                 return Ok(new ApiResponse
                 {
-                    Success=true,
+                    Success = true,
                     Message = "Renew token success",
                     Data = newToken
                 });
@@ -196,7 +196,7 @@ namespace WebApi_HienLTH.Controllers
             jwtId = Guid.NewGuid().ToString();
 
             //claims : dữ liệu chứa trong token để gửi về client
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 //sub : subject(chủ thể) thường là tên user
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
@@ -207,6 +207,13 @@ namespace WebApi_HienLTH.Controllers
                 new Claim("id", user.Id.ToString()),
                 new Claim("HoTen", user.HoTen)
             };
+
+            //lấy ra role của user
+            var roles = _context.UserRoles.Where(ur => ur.UserId == user.Id)
+                                        .Select(ur => ur.Role.RoleName)
+                                        .ToList();
+            //thêm vào claims
+            claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
             //tạo token 
             //JwtSecurityToken - đại diện cho 1 jwt token
