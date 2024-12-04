@@ -16,6 +16,9 @@ namespace WebApi_HienLTH.Data
         public DbSet<DonHangChiTietEntity> DonHangChiTiets { get; set; }
         public DbSet<NguoiDungEntity> NguoiDungs { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+
 
 
         #endregion
@@ -53,6 +56,8 @@ namespace WebApi_HienLTH.Data
                 e.Property(e => e.HoTen).IsRequired().HasMaxLength(100);
                 e.Property(e => e.Email).IsRequired().HasMaxLength(100);
             });
+            //cấu hình composite key cho bảng UserRole
+            modelBuilder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
         }
     }
 }
