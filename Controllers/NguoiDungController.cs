@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi_HienLTH.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class NguoiDungController : ControllerBase
@@ -15,5 +15,13 @@ namespace WebApi_HienLTH.Controllers
         {
             return Ok(new { message = "Bạn đã được xác thực!" });
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Manager")]
+        public IActionResult AdminOnly()
+        {
+            return Ok(new { message = "Đăng nhập thành công" });
+        }
+
     }
 }
