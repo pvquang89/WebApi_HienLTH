@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using WebApi_HienLTH.Data;
 using WebApi_HienLTH.Helper;
+using WebApi_HienLTH.Middleware;
 using WebApi_HienLTH.Models;
 using WebApi_HienLTH.Models.JwtModel;
 using WebApi_HienLTH.Models.ModelsForJwt;
@@ -85,6 +86,24 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication(); //đặt trước author
+//app.Use(async (context, next) =>
+//{
+//    await next();
+//    if (context.Response.StatusCode == 403)
+//    {
+//        context.Response.ContentType = "application/json";
+//        await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
+//        {
+//            message = "Bạn không có quyền truy cập vào tài nguyên này."
+//        }));
+//    }
+//});
+
+
+// Sử dụng middleware tùy chỉnh
+app.UseCustomForbiddenMiddleware();
+
+
 app.UseAuthorization();
 
 app.MapControllers();
