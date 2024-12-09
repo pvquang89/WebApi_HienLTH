@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using WebApi_HienLTH.Data;
 using WebApi_HienLTH.Helper;
+using WebApi_HienLTH.Middleware;
 using WebApi_HienLTH.Models;
 using WebApi_HienLTH.Models.JwtModel;
 using WebApi_HienLTH.Models.ModelsForJwt;
@@ -35,6 +36,8 @@ builder.Services.AddScoped<IGenericRepository<LoaiModel>, LoaiRepository>();
 builder.Services.AddScoped<IGenericRepository<HangHoaModel>, HangHoaRepository>();
 builder.Services.AddScoped<IGenericRepository<DonHangModel>, DonHangRepository>();
 builder.Services.AddScoped<DonHangChiTietRepository>();
+builder.Services.AddScoped<INguoiDungRepository, NguoiDungRepository>();
+
 
 //Cấu hình làm việc với jwt
 //Đọc cấu hình jwt từ appSettings.json vào jwtsettings class
@@ -42,7 +45,7 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSet
 
 //Đăng ký DI
 builder.Services.AddScoped<JwtSettings>();
-builder.Services.AddScoped<INguoiDungRepository, NguoiDungRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 // Lấy secretKey từ file cấu hình 
 var secretKey = builder.Configuration["JwtSettings:SecretKey"];
 //Chuyển secretKey sang dạng byte để mã hoá 
@@ -85,6 +88,24 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication(); //đặt trước author
+//app.Use(async (context, next) =>
+//{
+//    await next();
+//    if (context.Response.StatusCode == 403)
+//    {
+//        context.Response.ContentType = "application/json";
+//        await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
+//        {
+//            message = "Bạn không có quyền truy cập vào tài nguyên này."
+//        }));
+//    }
+//});
+
+
+// Sử dụng middleware tùy chỉnh
+app.UseCustomForbiddenMiddleware();
+
+
 app.UseAuthorization();
 
 app.MapControllers();

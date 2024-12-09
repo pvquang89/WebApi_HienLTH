@@ -20,13 +20,13 @@ namespace WebApi_HienLTH.Controllers
     public class AuthController : ControllerBase
     {
         private readonly MyDbContext _context;
-        private readonly INguoiDungRepository _nguoiDungRepository;
+        private readonly IAuthRepository _authRepository;
         private readonly JwtSettings _jwtSettings;
 
-        public AuthController(INguoiDungRepository nguoiDungRepository,
+        public AuthController(IAuthRepository nguoiDungRepository,
             IOptionsMonitor<JwtSettings> optionsMonitor, MyDbContext context)
         {
-            _nguoiDungRepository = nguoiDungRepository;
+            _authRepository = nguoiDungRepository;
             //optionsMonitor.CurrentValue trả về obj JwtSettings 
             _jwtSettings = optionsMonitor.CurrentValue;
             _context = context;
@@ -35,7 +35,7 @@ namespace WebApi_HienLTH.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel request)
         {
-            var user = _nguoiDungRepository.Authenticate(request.UserName, request.Password);
+            var user = _authRepository.Authenticate(request.UserName, request.Password);
 
             if (user == null)
                 return Unauthorized(new ApiResponse
@@ -148,11 +148,11 @@ namespace WebApi_HienLTH.Controllers
                     return NotFound(new { Message = "User not found" });
 
                 //cấp bộ token mới
-                var newToken = await GenerateToken(user); 
+                var newToken = await GenerateToken(user);
                 //ở đây không cần lưu lại bộ token mới vào database
                 return Ok(new ApiResponse
                 {
-                    Success=true,
+                    Success = true,
                     Message = "Renew token success",
                     Data = newToken
                 });
@@ -196,7 +196,7 @@ namespace WebApi_HienLTH.Controllers
             jwtId = Guid.NewGuid().ToString();
 
             //claims : dữ liệu chứa trong token để gửi về client
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 //sub : subject(chủ thể) thường là tên user
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
@@ -207,6 +207,13 @@ namespace WebApi_HienLTH.Controllers
                 new Claim("id", user.Id.ToString()),
                 new Claim("HoTen", user.HoTen)
             };
+
+            //lấy ra role của user
+            var roles = _context.UserRoles.Where(ur => ur.UserId == user.Id)
+                                        .Select(ur => ur.Role.RoleName)
+                                        .ToList();
+            //thêm vào claims
+            claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
             //tạo token 
             //JwtSecurityToken - đại diện cho 1 jwt token

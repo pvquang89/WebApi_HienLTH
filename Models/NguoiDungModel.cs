@@ -1,13 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApi_HienLTH.Data
+namespace WebApi_HienLTH.Models
 {
-    [Table("NguoiDung")]
-    public class NguoiDungEntity
+    public class NguoiDungModel
     {
-        [Key]
-        public int Id { get; set; }
         [Required]
         [MaxLength(50)]
         public string UserName { get; set; }
@@ -16,8 +12,5 @@ namespace WebApi_HienLTH.Data
         public string Password { get; set; }
         public string HoTen { get; set; }
         public string Email { get; set; }
-
-        //
-        public ICollection<UserRoleEntity> UserRoles { get; set; }    
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyWebApiApp.Data;
+using WebApi_HienLTH.Models.DTO;
 
 namespace WebApi_HienLTH.Data
 {
@@ -16,6 +17,9 @@ namespace WebApi_HienLTH.Data
         public DbSet<DonHangChiTietEntity> DonHangChiTiets { get; set; }
         public DbSet<NguoiDungEntity> NguoiDungs { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<RoleEntity> Roles { get; set; }
+        public DbSet<UserRoleEntity> UserRoles { get; set; }
+
 
 
         #endregion
@@ -53,6 +57,11 @@ namespace WebApi_HienLTH.Data
                 e.Property(e => e.HoTen).IsRequired().HasMaxLength(100);
                 e.Property(e => e.Email).IsRequired().HasMaxLength(100);
             });
+            //cấu hình composite key cho bảng UserRole
+            modelBuilder.Entity<UserRoleEntity>().HasKey(ur => new { ur.UserId, ur.RoleId });
+
+            //hasnokey : ko ánh xạ vào bảng thực tế
+            modelBuilder.Entity<UserWithRolesDto>().HasNoKey();
         }
     }
 }
