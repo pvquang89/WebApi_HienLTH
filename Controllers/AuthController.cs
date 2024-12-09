@@ -20,13 +20,13 @@ namespace WebApi_HienLTH.Controllers
     public class AuthController : ControllerBase
     {
         private readonly MyDbContext _context;
-        private readonly INguoiDungRepository _nguoiDungRepository;
+        private readonly IAuthRepository _authRepository;
         private readonly JwtSettings _jwtSettings;
 
-        public AuthController(INguoiDungRepository nguoiDungRepository,
+        public AuthController(IAuthRepository nguoiDungRepository,
             IOptionsMonitor<JwtSettings> optionsMonitor, MyDbContext context)
         {
-            _nguoiDungRepository = nguoiDungRepository;
+            _authRepository = nguoiDungRepository;
             //optionsMonitor.CurrentValue trả về obj JwtSettings 
             _jwtSettings = optionsMonitor.CurrentValue;
             _context = context;
@@ -35,7 +35,7 @@ namespace WebApi_HienLTH.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel request)
         {
-            var user = _nguoiDungRepository.Authenticate(request.UserName, request.Password);
+            var user = _authRepository.Authenticate(request.UserName, request.Password);
 
             if (user == null)
                 return Unauthorized(new ApiResponse
