@@ -36,6 +36,8 @@ builder.Services.AddScoped<IGenericRepository<LoaiModel>, LoaiRepository>();
 builder.Services.AddScoped<IGenericRepository<HangHoaModel>, HangHoaRepository>();
 builder.Services.AddScoped<IGenericRepository<DonHangModel>, DonHangRepository>();
 builder.Services.AddScoped<DonHangChiTietRepository>();
+builder.Services.AddScoped<INguoiDungRepository, NguoiDungRepository>();
+
 
 //Cấu hình làm việc với jwt
 //Đọc cấu hình jwt từ appSettings.json vào jwtsettings class
@@ -43,7 +45,7 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSet
 
 //Đăng ký DI
 builder.Services.AddScoped<JwtSettings>();
-builder.Services.AddScoped<INguoiDungRepository, NguoiDungRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 // Lấy secretKey từ file cấu hình 
 var secretKey = builder.Configuration["JwtSettings:SecretKey"];
 //Chuyển secretKey sang dạng byte để mã hoá 
