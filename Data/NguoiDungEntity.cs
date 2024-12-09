@@ -18,6 +18,6 @@ namespace WebApi_HienLTH.Data
         public string Email { get; set; }
 
         //
-        public ICollection<UserRole> Roles { get; set; }    
+        public ICollection<UserRoleEntity> UserRoles { get; set; }    
     }
 }
