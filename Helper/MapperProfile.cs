@@ -2,6 +2,7 @@
 using MyWebApiApp.Data;
 using WebApi_HienLTH.Data;
 using WebApi_HienLTH.Models;
+using WebApi_HienLTH.Models.DTO;
 
 namespace WebApi_HienLTH.Helper
 {
@@ -30,6 +31,11 @@ namespace WebApi_HienLTH.Helper
             CreateMap<DonHangChiTietEntity, DonHangChiTietModel>()
                 .ReverseMap();
 
+
+            //map roles
+            CreateMap<RoleEntity, RoleDto>().ReverseMap();
+            //map nguoidung
+            CreateMap<NguoiDungEntity, NguoiDungModel>().ReverseMap();
         }
 
     }
