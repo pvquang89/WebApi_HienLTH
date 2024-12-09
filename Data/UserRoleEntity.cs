@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace WebApi_HienLTH.Data
 {
-    public class UserRole
+    public class UserRoleEntity
     {
         //ko cần vì dùng cặp khoá tổ hợp dưới đã đủ xác định tính duy nhất mỗi dòng
         //[Key]
@@ -14,9 +15,12 @@ namespace WebApi_HienLTH.Data
 
         // Navigation properties
         [ForeignKey("UserId")]
+        [JsonIgnore]
         public NguoiDungEntity NguoiDung { get; set; }
 
         [ForeignKey("RoleId")]
-        public Role Role { get; set; }
+        [JsonIgnore]
+
+        public RoleEntity Role { get; set; }
     }
 }

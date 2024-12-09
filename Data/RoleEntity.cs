@@ -2,7 +2,7 @@
 
 namespace WebApi_HienLTH.Data
 {
-    public class Role
+    public class RoleEntity
     {
         [Key]
         public int Id { get; set; }
@@ -10,5 +10,8 @@ namespace WebApi_HienLTH.Data
         [Required]
         [MaxLength(50)]
         public string RoleName { get; set; }
+
+        //navigation property
+        public ICollection<UserRoleEntity> UserRoles { get; set; }
     }
 }
