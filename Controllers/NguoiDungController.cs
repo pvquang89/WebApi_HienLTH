@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebApi_HienLTH.Data;
+using WebApi_HienLTH.Models;
+using WebApi_HienLTH.Models.DTO;
+using WebApi_HienLTH.Repository.NguoiDungRepository;
 
 namespace WebApi_HienLTH.Controllers
 {
@@ -9,19 +14,79 @@ namespace WebApi_HienLTH.Controllers
     [Authorize]
     public class NguoiDungController : ControllerBase
     {
+        private readonly INguoiDungRepository _nguoiDungRepository;
 
-        [HttpGet]
-        public IActionResult GetUsers()
+        public NguoiDungController(INguoiDungRepository nguoiDungRepository)
         {
-            return Ok(new { message = "Bạn đã được xác thực!" });
+            _nguoiDungRepository = nguoiDungRepository;
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,Manager")]
-        public IActionResult AdminOnly()
+        public async Task<IActionResult> GetAllRoles()
         {
-            return Ok(new { message = "Đăng nhập thành công" });
+            return Ok(await _nguoiDungRepository.GetAllRolesAsync());
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserWithRoles()
+        {
+            var usersWithRoles = await _nguoiDungRepository.GetAllUserWithRolesAsync();
+            return Ok(usersWithRoles);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<NguoiDungModel>> CreateUser(NguoiDungModel model)
+        {
+            await _nguoiDungRepository.CreateUser(model);
+            return Ok(new {message = "User created success !"});
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsersGroupedByRole()
+        {
+            var result = await _nguoiDungRepository.GetUsersGroupedByRoleAsync();
+            return Ok(result);
+        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetUserRoles()
+        //{
+        //    var userRoles = await _context
+        //                 .Set<UserRolesDto>()
+        //                 .FromSqlRaw(@"Select *from GetUserRoles()")
+        //                 .ToListAsync();
+        //    return Ok(userRoles);
+        //}
+
+        //[HttpGet]
+        //public async Task<IActionResult> GetUsersGroupedByRole()
+        //{
+        //    // Gọi function GetUserRoles() từ PostgreSQL bằng FromSqlRaw
+        //    var users = await _context.Set<UserRolesDto>()
+        //        .FromSqlRaw(@"SELECT * FROM GetUserRoles()")
+        //        .ToListAsync();
+
+        //    // Nhóm người dùng theo vai trò 
+        //    var groupedUsers = users
+        //        .GroupBy(u => u.VaiTro)  // Nhóm theo vai trò
+        //        .Select(group => new
+        //        {
+        //            VaiTro = group.Key,  // giá trị vai trò của từng nhóm
+        //            Users = group.ToList()  // Danh sách người dùng trong mỗi vai trò
+        //        })
+        //        .ToList();
+
+        //    // Trả về kết quả nhóm
+        //    return Ok(groupedUsers);
+        //}
+
+
+
+
+
+
+
+
 
     }
+
 }
