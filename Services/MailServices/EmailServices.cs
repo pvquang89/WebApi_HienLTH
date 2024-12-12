@@ -8,11 +8,11 @@ using WebApi_HienLTH.Models.MailModel;
 
 namespace WebApi_HienLTH.Services.MailServices
 {
-    public class EmailRepository : IEmailRepository
+    public class EmailServices : IEmailServices
     {
         private readonly SmtpSettings _smtpSettings;
 
-        public EmailRepository(IOptions<SmtpSettings> smtpSettings)
+        public EmailServices(IOptions<SmtpSettings> smtpSettings)
         {
             _smtpSettings = smtpSettings.Value; //lấy giá trị cấu hình từ appSettings.json
         }

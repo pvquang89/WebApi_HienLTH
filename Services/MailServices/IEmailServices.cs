@@ -1,6 +1,6 @@
 ﻿namespace WebApi_HienLTH.Services.MailServices
 {
-    public interface IEmailRepository
+    public interface IEmailServices
     {
         Task SendEmailAsync(string email, string subject, string message);
     }
