@@ -19,6 +19,9 @@ namespace WebApi_HienLTH.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
         public DbSet<UserRoleEntity> UserRoles { get; set; }
+        public DbSet<ConfirmationTokenEntity> ConfirmationTokens { get; set; }
+
+
 
 
 
