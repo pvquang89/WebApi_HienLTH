@@ -11,6 +11,8 @@ namespace WebApi_HienLTH.Models
         [MaxLength(250)]
         public string Password { get; set; }
         public string HoTen { get; set; }
+        [Required]        
+        [EmailAddress]
         public string Email { get; set; }
     }
 }
