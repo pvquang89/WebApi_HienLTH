@@ -14,6 +14,7 @@ using WebApi_HienLTH.Models.ModelsForJwt;
 using WebApi_HienLTH.Repository;
 using WebApi_HienLTH.Repository.NguoiDungRepository;
 using WebApi_HienLTH.Repository.Repository;
+using WebApi_HienLTH.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,11 +33,7 @@ builder.Services.AddEntityFrameworkNpgsql().AddDbContext<MyDbContext>
 //register DI
 //resgiter automapper
 builder.Services.AddAutoMapper(typeof(MapperProfile));
-builder.Services.AddScoped<IGenericRepository<LoaiModel>, LoaiRepository>();
-builder.Services.AddScoped<IGenericRepository<HangHoaModel>, HangHoaRepository>();
-builder.Services.AddScoped<IGenericRepository<DonHangModel>, DonHangRepository>();
-builder.Services.AddScoped<DonHangChiTietRepository>();
-builder.Services.AddScoped<INguoiDungRepository, NguoiDungRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 //Cấu hình làm việc với jwt
