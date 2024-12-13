@@ -10,11 +10,16 @@ using WebApi_HienLTH.Helper;
 using WebApi_HienLTH.Middleware;
 using WebApi_HienLTH.Models;
 using WebApi_HienLTH.Models.JwtModel;
+using WebApi_HienLTH.Models.MailModel;
 using WebApi_HienLTH.Models.ModelsForJwt;
 using WebApi_HienLTH.Repository;
 using WebApi_HienLTH.Repository.NguoiDungRepository;
 using WebApi_HienLTH.Repository.Repository;
+
 using WebApi_HienLTH.UnitOfWork;
+
+using WebApi_HienLTH.Services.MailServices;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +40,10 @@ builder.Services.AddEntityFrameworkNpgsql().AddDbContext<MyDbContext>
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+//Email
+// Cấu hình ánh xạ các thông số SMTP từ appsettings.json
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+builder.Services.AddScoped<IEmailServices, EmailServices>();
 
 //Cấu hình làm việc với jwt
 //Đọc cấu hình jwt từ appSettings.json vào jwtsettings class

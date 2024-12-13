@@ -17,7 +17,11 @@ namespace WebApi_HienLTH.Data
         public string HoTen { get; set; }
         public string Email { get; set; }
 
+        //thêm để tương tác với chức năng gửi mail
+        public bool IsActivated { get; set; } = false;
+
         //
-        public ICollection<UserRoleEntity> UserRoles { get; set; }    
+        public ICollection<UserRoleEntity> UserRoles { get; set; }
+
     }
 }
