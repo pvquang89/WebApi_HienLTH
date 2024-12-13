@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApi_HienLTH.Models;
 using WebApi_HienLTH.Repository;
+using WebApi_HienLTH.UnitOfWork;
 
 namespace WebApi_HienLTH.Controllers
 {
@@ -8,18 +9,17 @@ namespace WebApi_HienLTH.Controllers
     [ApiController]
     public class DonHangChiTietController : Controller
     {
-        private readonly DonHangChiTietRepository _donHangChiTietRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-
-        public DonHangChiTietController(DonHangChiTietRepository donHangChiTietRepository)
+        public DonHangChiTietController(IUnitOfWork unitOfWork)
         {
-            _donHangChiTietRepository = donHangChiTietRepository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DonHangChiTietModel>>> GetAll(string? tenHh, int? maDh, string? sortBy, int page = 1)
         {
-            var entities = await _donHangChiTietRepository.GetAllAsync(tenHh, maDh, sortBy, page);
+            var entities = await _unitOfWork.DonHangChiTietRepository.GetAllAsync(tenHh, maDh, sortBy, page);
             if (!entities.Any())
             {
                 return NotFound("Ko tìm thấy");
@@ -30,9 +30,9 @@ namespace WebApi_HienLTH.Controllers
         [HttpGet("{maDh}/{maHh}")]
         public async Task<ActionResult<DonHangChiTietModel>> GetById(int maDh, int maHh)
         {
-            if (!await _donHangChiTietRepository.ExistsAsync(maDh, maHh))
+            if (!await _unitOfWork.DonHangChiTietRepository.ExistsAsync(maDh, maHh))
                 return NotFound("Đơn hàng chi tiết không tồn tại");
-            var entities = await _donHangChiTietRepository.GetByIdAsync(maDh, maHh);
+            var entities = await _unitOfWork.DonHangChiTietRepository.GetByIdAsync(maDh, maHh);
             return Ok(entities);
         }
         [HttpPost]
@@ -41,7 +41,7 @@ namespace WebApi_HienLTH.Controllers
             if (model == null)
                 return BadRequest("Dữ liệu không hợp lệ.");
 
-            await _donHangChiTietRepository.CreateAsync(model);
+            await _unitOfWork.DonHangChiTietRepository.CreateAsync(model);
             return Ok("Thêm chi tiết đơn hàng thành công.");
         }
         [HttpPut("{maDh}/{maHh}")]
@@ -50,28 +50,28 @@ namespace WebApi_HienLTH.Controllers
             if (maDh != model.MaDh || maHh != model.MaHh)
                 return BadRequest("Mã đơn hàng và mã hàng hóa không khớp.");
 
-            await _donHangChiTietRepository.UpdateAsync(model);
+            await _unitOfWork.DonHangChiTietRepository.UpdateAsync(model);
             return NoContent();
         }
 
         [HttpDelete("{maDh}/{maHh}")]
         public async Task<IActionResult> Delete(int maDh, int maHh)
         {
-            if (!await _donHangChiTietRepository.ExistsAsync(maDh, maHh))
+            if (!await _unitOfWork.DonHangChiTietRepository.ExistsAsync(maDh, maHh))
                 return NotFound("Đơn hàng chi tiết không tồn tại");
 
-            await _donHangChiTietRepository.DeleteAsync(maDh, maHh);
+            await _unitOfWork.DonHangChiTietRepository.DeleteAsync(maDh, maHh);
             return NoContent();
         }
 
         [HttpGet("{maDh}")]
         public async Task<ActionResult<double>> GetTotalValueByMaDonHang(int maDh)
         {
-            if (!await _donHangChiTietRepository.ExistsAsync(maDh))
+            if (!await _unitOfWork.DonHangChiTietRepository.ExistsAsync(maDh))
             {
                 return NotFound();
             }
-            var totalValue = await _donHangChiTietRepository.GetTotalValueByMaDh(maDh);
+            var totalValue = await _unitOfWork.DonHangChiTietRepository.GetTotalValueByMaDh(maDh);
             return Ok(totalValue);
         }
 

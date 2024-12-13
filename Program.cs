@@ -15,7 +15,11 @@ using WebApi_HienLTH.Models.ModelsForJwt;
 using WebApi_HienLTH.Repository;
 using WebApi_HienLTH.Repository.NguoiDungRepository;
 using WebApi_HienLTH.Repository.Repository;
+
+using WebApi_HienLTH.UnitOfWork;
+
 using WebApi_HienLTH.Services.MailServices;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,11 +38,7 @@ builder.Services.AddEntityFrameworkNpgsql().AddDbContext<MyDbContext>
 //register DI
 //resgiter automapper
 builder.Services.AddAutoMapper(typeof(MapperProfile));
-builder.Services.AddScoped<IGenericRepository<LoaiModel>, LoaiRepository>();
-builder.Services.AddScoped<IGenericRepository<HangHoaModel>, HangHoaRepository>();
-builder.Services.AddScoped<IGenericRepository<DonHangModel>, DonHangRepository>();
-builder.Services.AddScoped<DonHangChiTietRepository>();
-builder.Services.AddScoped<INguoiDungRepository, NguoiDungRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 //Email
 // Cấu hình ánh xạ các thông số SMTP từ appsettings.json

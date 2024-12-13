@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApi_HienLTH.Models;
 using WebApi_HienLTH.Repository.Repository;
+using WebApi_HienLTH.UnitOfWork;
 
 namespace WebApi_HienLTH.Controllers
 {
@@ -8,24 +9,24 @@ namespace WebApi_HienLTH.Controllers
     [ApiController]
     public class HangHoaController : ControllerBase
     {
-        private readonly IGenericRepository<HangHoaModel> _hangHoaRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HangHoaController(IGenericRepository<HangHoaModel> hangHoaRepository)
+        public HangHoaController(IUnitOfWork unitOfWork)
         {
-            _hangHoaRepository = hangHoaRepository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<HangHoaModel>>> GetAll()
         {
-            var entity = await _hangHoaRepository.GetAllAsync();
+            var entity = await _unitOfWork.HangHoaRepository.GetAllAsync();
             return Ok(entity);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<HangHoaModel>> GetById(int id)
         {
-            var entity = await _hangHoaRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.HangHoaRepository.GetByIdAsync(id);
             return entity == null ? NotFound("Không có hàng hoá chứa id này") : Ok(entity);
         }
 
@@ -35,7 +36,7 @@ namespace WebApi_HienLTH.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _hangHoaRepository.CreateAsync(model);
+            await _unitOfWork.HangHoaRepository.CreateAsync(model);
             return CreatedAtAction(nameof(GetById), new { id = model.MaHh }, model);
         }
 
@@ -44,19 +45,19 @@ namespace WebApi_HienLTH.Controllers
         {
             if (id != model.MaHh)
                 return BadRequest("Id không trùng khớp");
-            if (!await _hangHoaRepository.ExistsAsync(id))
+            if (!await _unitOfWork.HangHoaRepository.ExistsAsync(id))
                 return NotFound("Không tồn tại hàng hoá có id này");
 
-            await _hangHoaRepository.UpdateAsync(model);
+            await _unitOfWork.HangHoaRepository.UpdateAsync(model);
             return Ok("Cập nhật thành công");
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!await _hangHoaRepository.ExistsAsync(id))
+            if (!await _unitOfWork.HangHoaRepository.ExistsAsync(id))
                 return NotFound("Không thấy hàng hoá với id này");
-            await _hangHoaRepository.DeleteAsync(id);
+            await _unitOfWork.HangHoaRepository.DeleteAsync(id);
             return Ok("Xoá thành công");
         }
     }
