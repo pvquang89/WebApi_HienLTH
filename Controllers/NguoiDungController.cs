@@ -6,6 +6,7 @@ using WebApi_HienLTH.Data;
 using WebApi_HienLTH.Models;
 using WebApi_HienLTH.Models.DTO;
 using WebApi_HienLTH.Repository.NguoiDungRepository;
+using WebApi_HienLTH.UnitOfWork;
 
 namespace WebApi_HienLTH.Controllers
 {
@@ -14,37 +15,37 @@ namespace WebApi_HienLTH.Controllers
     [Authorize]
     public class NguoiDungController : ControllerBase
     {
-        private readonly INguoiDungRepository _nguoiDungRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public NguoiDungController(INguoiDungRepository nguoiDungRepository)
+        public NguoiDungController(IUnitOfWork unitOfWork)
         {
-            _nguoiDungRepository = nguoiDungRepository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllRoles()
         {
-            return Ok(await _nguoiDungRepository.GetAllRolesAsync());
+            return Ok(await _unitOfWork.NguoiDungRepository.GetAllRolesAsync());
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUserWithRoles()
         {
-            var usersWithRoles = await _nguoiDungRepository.GetAllUserWithRolesAsync();
+            var usersWithRoles = await _unitOfWork.NguoiDungRepository.GetAllUserWithRolesAsync();
             return Ok(usersWithRoles);
         }
 
         [HttpPost]
         public async Task<ActionResult<NguoiDungModel>> CreateUser(NguoiDungModel model)
         {
-            await _nguoiDungRepository.CreateUser(model);
+            await _unitOfWork.NguoiDungRepository.CreateUser(model);
             return Ok(new {message = "User created success !"});
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUsersGroupedByRole()
         {
-            var result = await _nguoiDungRepository.GetUsersGroupedByRoleAsync();
+            var result = await _unitOfWork.NguoiDungRepository.GetUsersGroupedByRoleAsync();
             return Ok(result);
         }
         //[HttpGet]
@@ -78,15 +79,6 @@ namespace WebApi_HienLTH.Controllers
         //    // Trả về kết quả nhóm
         //    return Ok(groupedUsers);
         //}
-
-
-
-
-
-
-
-
-
     }
 
 }

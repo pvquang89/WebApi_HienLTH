@@ -12,6 +12,7 @@ using WebApi_HienLTH.Models;
 using WebApi_HienLTH.Models.JwtModel;
 using WebApi_HienLTH.Models.ModelsForJwt;
 using WebApi_HienLTH.Repository.NguoiDungRepository;
+using WebApi_HienLTH.UnitOfWork;
 
 namespace WebApi_HienLTH.Controllers
 {
@@ -20,13 +21,14 @@ namespace WebApi_HienLTH.Controllers
     public class AuthController : ControllerBase
     {
         private readonly MyDbContext _context;
-        private readonly IAuthRepository _authRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly JwtSettings _jwtSettings;
 
-        public AuthController(IAuthRepository nguoiDungRepository,
-            IOptionsMonitor<JwtSettings> optionsMonitor, MyDbContext context)
+        public AuthController(IUnitOfWork unitOfWork,
+            IOptionsMonitor<JwtSettings> optionsMonitor,
+            MyDbContext context)
         {
-            _authRepository = nguoiDungRepository;
+            _unitOfWork = unitOfWork;
             //optionsMonitor.CurrentValue trả về obj JwtSettings 
             _jwtSettings = optionsMonitor.CurrentValue;
             _context = context;
@@ -35,7 +37,7 @@ namespace WebApi_HienLTH.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel request)
         {
-            var user = _authRepository.Authenticate(request.UserName, request.Password);
+            var user = _unitOfWork.AuthRepository.Authenticate(request.UserName, request.Password);
 
             if (user == null)
                 return Unauthorized(new ApiResponse
